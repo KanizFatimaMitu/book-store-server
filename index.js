@@ -1,4 +1,4 @@
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const express = require('express')
 const cors = require('cors')
 const app = express()
@@ -31,12 +31,30 @@ async function run() {
 
     const booksCollection = client.db("book-store").collection("books")
 
-    http://localhost:5000/books
+    // http://localhost:5000/books
     app.post('/books', async (req, res) => {
       const newBook = req.body;
       console.log(newBook)
       const addBook = await booksCollection.insertOne(newBook)
       res.send(addBook)
+    })
+
+    // http://localhost:5000/books
+    app.get('/books', async(req,res)=>{
+      const query ={};
+      const cursor = booksCollection.find(query);
+      const allBooks = await cursor.toArray();
+      res.send (allBooks);
+
+    })
+
+    // http://localhost:5000/books/${id}
+    app.delete('/books/:id', async (req,res) => {
+      const id =req.params.id;
+      const query = {id}
+      console.log(query)
+      const deleteBook = await booksCollection.deleteOne(query)
+      res.send(deleteBook);
     })
 
   } finally {
