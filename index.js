@@ -40,21 +40,22 @@ async function run() {
     })
 
     // http://localhost:5000/books
-    app.get('/books', async(req,res)=>{
-      const query ={};
+    app.get('/books', async (req, res) => {
+      const query = {};
       const cursor = booksCollection.find(query);
       const allBooks = await cursor.toArray();
-      res.send (allBooks);
+      res.send(allBooks);
 
     })
 
     // http://localhost:5000/books/${id}
-    app.delete('/books/:id', async (req,res) => {
-      const id =req.params.id;
-      const query = {id}
+    app.delete('/books/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: id }
       console.log(query)
-      const deleteBook = await booksCollection.deleteOne(query)
+      const deleteBook = await booksCollection.deleteOne(query.data)
       res.send(deleteBook);
+      console.log("deleted", deleteBook)
     })
 
   } finally {
