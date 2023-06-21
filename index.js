@@ -58,6 +58,21 @@ async function run() {
       console.log("deleted", deleteBook)
     })
 
+     // http://localhost:5000/books/${id}
+     app.put('/books/:id', async(req,res) => {
+      const id = req.params.id;
+      const updateBooks = req.body;
+      const filter = {_id : ObjectId(id)}
+      const options = {upsert : true};
+      const updateDoc = {
+        set : {
+          name : updateBooks.name
+        }
+      }
+      const result = await booksCollection.updateOne(filter, updateDoc, options);
+      res.send(result);
+     })
+
   } finally {
     // await client.close();
   }
